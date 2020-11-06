@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inspirational Quotes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <link rel="shortcut icon" href="https://img.icons8.com/nolan/64/quote-left.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500&family=Josefin+Sans&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #212e3e;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: #4b9cfe;
+            height: 60vh;
+            width: 45vw;
+            border-radius: 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .inner {
+            background-color: #fff;
+            height: 40vh;
+            width: 30vw;
+            position: relative;
+            border-radius: 5px;
+            -webkit-box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.5);
+            -moz-box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.5);
+            box-shadow: 0px 0px 18px 0px rgba(0, 0, 0, 0.5);
+        }
+
+        .button {
+            position: absolute;
+            bottom: 0;
+            background: #0075dc;
+            width: 100%;
+            height: 40px;
+            color: #fff;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+            transition: all .3s linear;
+            border-radius: 0 0 5px 5px;
+            font-family: 'Josefin Sans', sans-serif;
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Old versions of Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+            /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+        }
+
+        .button:hover {
+            background: #4896f4;
+            cursor: pointer;
+        }
+
+        .button:active {
+            transform: scale(1.03);
+        }
+
+        /* clip-path: polygon(100% 0, 0 0, 100% 100%); */
+
+        .number {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #acc6e1;
+            border-radius: 0 5px 0 0;
+            height: 50px;
+            width: 50px;
+            clip-path: polygon(100% 0, 0 0, 100% 100%);
+            display: flex;
+            flex-direction: row-reverse;
+            cursor: pointer;
+        }
+
+        .fab.fa-twitter {
+            margin: 6px;
+        }
+
+        .start-quote {
+            color: #dfd6e2;
+            position: absolute;
+            top: 5%;
+            left: 5%;
+        }
+
+        .quotes {
+            position: absolute;
+            top: 20%;
+            margin-left: 20px;
+            font-size: 25px;
+            font-family: 'Dancing Script', cursive;
+            color: #707070;
+            margin-right: 20px;
+        }
+
+        .author {
+            font-family: 'Josefin Sans', sans-serif;
+            position: absolute;
+            bottom: 20%;
+            right: 5%;
+            color: #5f5f5f;
+        }
+
+        .author::before {
+            content: 'By ';
+        }
+
+        @media only screen and (max-width: 600px) {
+            .container{
+                height: 80%;
+                width: 80%;
+            }
+            .inner{
+                height: 70vh;
+                width: 60vw;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="inner">
+            <div class="box">
+                <p class="number" onclick="tweeting();">
+                    <i class="fab fa-twitter fa-lg" title="make tweet" id="tweet" style="color:#55acee;"></i>
+                </p>
+                <div class="text">
+                    <i class="start-quote fa-3x fas fa-quote-left"></i>
+                    <div id="quotes" class="quotes"></div>
+                    <div id="author" class="author"></div>
+                </div>
+                <label onclick="getQuotes();" class="button">
+                    <p>New Quote</p>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let readableData = '';
+        const author = document.getElementById('author');
+        const quotes = document.getElementById('quotes');
+        let quotesData = '';
+        // const tweetMe = document.getElementById('tweet');
+        let quote_text = document.getElementById('quotes');
+        let quote_author = document.getElementById('author');
+
+        const tweeting = () => {
+            let tweetPost = `https://twitter.com/intent/tweet?text=${quote_text.innerText} \n -${quote_author.innerText}`;
+            window.open(tweetPost);
+        }
+
+        const randNumFun = (readableData) => {
+            let rnum = Math.floor(Math.random() * 1643);
+            let quotesData = readableData[rnum];
+            quotes.innerText = `${quotesData.text}`;
+            quotesData.author == null ? author.innerText = `unknown` : author.innerText = `${quotesData.author}`;
+        }
+
+        const getQuotes = async () => {
+            const api = "https://type.fit/api/quotes";
+            try {
+                let data = await fetch(api);
+                let readableData = await data.json();
+                randNumFun(readableData);
+            } catch (error) {
+
+            }
+        }
+
+        getQuotes();
+    </script>
+</body>
+
+</html>
